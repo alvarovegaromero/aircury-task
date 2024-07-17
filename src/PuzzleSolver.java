@@ -13,7 +13,7 @@ public class PuzzleSolver {
     private static int width, height;
     //private static List<int[][]> pieces = new ArrayList<>();
     private static List<int[]> pieces = new ArrayList<>();
-    private static List<int[]> solutions = new ArrayList<>();
+    private static List<int[][]> solutions = new ArrayList<>();
 
     public static void main(String[] args) {
         try {
@@ -82,34 +82,68 @@ public class PuzzleSolver {
     }
 */
     private static void solvePuzzle() {
-        for (int i = 0; i < pieces.size(); i++) {
-            solutions.add(new int[]{i});
+        int[][] board = new int[height][width]; // Create an empty board
+        
+        solveRecursive(board, new ArrayList<>(pieces), 0, 0); // Start solving the puzzle
+    }
+        
+    private static boolean solveRecursive(int[][] board, List<int[]> remainingPieces, int row, int col) {
+        if (row == height) { // If we have filled the board.
+            int[][] solution = new int[height][width];
+            for (int i = 0; i < height; i++) {
+                solution[i] = board[i].clone();
+            }
+            solutions.add(solution); // Add the solution
+            return true;
         }
-    }
         
-    private static boolean solveRecursive(int[][] board, List<int[][]> remainingPieces, int row, int col) {
+        if (col == width) { // If we have reached the end of a row
+            return solveRecursive(board, remainingPieces, row + 1, 0); // Move to the next row
+        }
+    
+        // Fill row by row
+        for (int i = 0; i < remainingPieces.size(); i++) {
+            int[] piece = remainingPieces.get(i);
+    
+            if (pieceFits(board, piece, row, col)) { // If the piece fits
+                placePiece(board, piece, row, col); // Place the piece on the board
+    
+                // Remove the piece from the remaining pieces and continue with the next position
+                List<int[]> newRemainingPieces = new ArrayList<>(remainingPieces);
+                newRemainingPieces.remove(i);
+                if (solveRecursive(board, newRemainingPieces, row, col + 1)) {
+                    return true;
+                }
+    
+                removePiece(board, piece, row, col); // No solution - prune - remove from board
+            }
+        }
+
         return false;
     }
 
-    private static boolean pieceFits(int[][] board, int[][] piece, int row, int col) {
+    private static boolean pieceFits(int[][] board, int[] piece, int row, int col) {
         return false;
     }
 
-    private static void placePiece(int[][] board, int[][] piece, int row, int col) {
-        
+    private static void placePiece(int[][] board, int[] piece, int row, int col) {
+
     }
     
-    private static void removePiece(int[][] board, int[][] piece, int row, int col) {
+    private static void removePiece(int[][] board, int[] piece, int row, int col) {
 
     }
 
     private static void displaySolutions() {
         System.out.println("Solutions:");
-        for (int[] solution : solutions) {
-            String solutionStr = String.join(", ", Arrays.stream(solution)
-                                                        .mapToObj(Integer::toString)
-                                                        .collect(Collectors.toList()));
-            System.out.println(solutionStr);
+        for (int[][] solution : solutions) {
+            for (int[] row : solution) {
+                String rowStr = Arrays.stream(row)
+                                      .mapToObj(Integer::toString)
+                                      .collect(Collectors.joining(", "));
+                System.out.println(rowStr);
+            }
+            System.out.println(); // Print a blank line between solutions
         }
     }
 }
