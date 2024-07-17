@@ -12,7 +12,7 @@ public class PuzzleSolver {
 
     private static int width, height;
     //private static List<int[][]> pieces = new ArrayList<>();
-    private static List<int[]> pieces = new ArrayList<>();
+    private static List<Piece> pieces = new ArrayList<>();
     private static List<int[][]> solutions = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -44,15 +44,17 @@ public class PuzzleSolver {
             width = fileScanner.nextInt();
             height = fileScanner.nextInt();
             fileScanner.nextLine();
-        
+            
+            int i = 1;
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine().trim();
                 if (!line.isEmpty()) {
                     String[] parts = line.split(" ");
                     int[] sides = Arrays.stream(parts).mapToInt(Integer::parseInt).toArray();
-                    pieces.add(sides);
+                    pieces.add(new Piece(sides, i));
                     //pieces.add(generateAllRotations(sides));
                 }
+                i++;
             }
         } catch (FileNotFoundException e) {
             throw new RuntimeException("The specified file could not be found: " + fileName);
@@ -87,51 +89,85 @@ public class PuzzleSolver {
         solveRecursive(board, new ArrayList<>(pieces), 0, 0); // Start solving the puzzle
     }
         
-    private static boolean solveRecursive(int[][] board, List<int[]> remainingPieces, int row, int col) {
+    private static void solveRecursive(int[][] board, List<Piece> remainingPieces, int row, int col) {
         if (row == height) { // If we have filled the board.
             int[][] solution = new int[height][width];
             for (int i = 0; i < height; i++) {
                 solution[i] = board[i].clone();
             }
             solutions.add(solution); // Add the solution
-            return true;
+            return;
         }
         
         if (col == width) { // If we have reached the end of a row
-            return solveRecursive(board, remainingPieces, row + 1, 0); // Move to the next row
+            solveRecursive(board, remainingPieces, row + 1, 0); // Move to the next row
+            return;
         }
     
         // Fill row by row
         for (int i = 0; i < remainingPieces.size(); i++) {
-            int[] piece = remainingPieces.get(i);
+            Piece piece = remainingPieces.get(i);
     
             if (pieceFits(board, piece, row, col)) { // If the piece fits
                 placePiece(board, piece, row, col); // Place the piece on the board
     
                 // Remove the piece from the remaining pieces and continue with the next position
-                List<int[]> newRemainingPieces = new ArrayList<>(remainingPieces);
+                List<Piece> newRemainingPieces = new ArrayList<>(remainingPieces);
                 newRemainingPieces.remove(i);
-                if (solveRecursive(board, newRemainingPieces, row, col + 1)) {
-                    return true;
-                }
+                solveRecursive(board, newRemainingPieces, row, col + 1);
     
-                removePiece(board, piece, row, col); // No solution - prune - remove from board
+                removePiece(board, row, col); // No solution - prune - remove from board
             }
         }
-
-        return false;
     }
 
-    private static boolean pieceFits(int[][] board, int[] piece, int row, int col) {
-        return false;
+    private static boolean pieceFits(int[][] board, Piece piece, int row, int col) {
+        // Check if the piece fits within the board
+        if (row < 0 || row >= board.length || col < 0 || col >= board[0].length) {
+            return false;
+        }
+    
+        // Check if the position on the board is already occupied
+        if (board[row][col] != 0) {
+            return false;
+        }
+    
+        // Check if the piece fits with the surrounding pieces
+        // Assuming that the Piece class has a getSides() method that returns an array of integers representing the sides
+        int[] sides = piece.getSides();
+    
+        // Check the piece above
+        if (row > 0 && board[row - 1][col] != 0 && board[row - 1][col] != sides[0]) {
+            return false;
+        }
+    
+        // Check the piece to the right
+        if (col < board[0].length - 1 && board[row][col + 1] != 0 && board[row][col + 1] != sides[1]) {
+            return false;
+        }
+    
+        // Check the piece below
+        if (row < board.length - 1 && board[row + 1][col] != 0 && board[row + 1][col] != sides[2]) {
+            return false;
+        }
+    
+        // Check the piece to the left
+        if (col > 0 && board[row][col - 1] != 0 && board[row][col - 1] != sides[3]) {
+            return false;
+        }
+    
+        // If all checks passed, the piece fits
+        return true;
     }
 
-    private static void placePiece(int[][] board, int[] piece, int row, int col) {
-
+    private static void placePiece(int[][] board, Piece piece, int row, int col) {
+        // Asumiendo que cada pieza tiene un ID único
+        board[row][col] = piece.getRowIndex();
     }
     
-    private static void removePiece(int[][] board, int[] piece, int row, int col) {
-
+    private static void removePiece(int[][] board, int row, int col) {
+        // Asumiendo que un valor de 0 representa un espacio vacío en el tablero
+        board[row][col] = 0;
     }
 
     private static void displaySolutions() {
