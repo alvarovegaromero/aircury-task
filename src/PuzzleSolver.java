@@ -15,7 +15,7 @@ public class PuzzleSolver {
 
     public static void main(String[] args) {
         try {
-            String fileName = getInput();
+            String fileName = getFilenameInput();
             processFile(fileName);
             solvePuzzle();
             displaySolutions();
@@ -24,7 +24,7 @@ public class PuzzleSolver {
         }
     }
 
-    public static String getInput() {
+    public static String getFilenameInput() {
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.print("Write the name of the Puzzle you want to solve: ");
             String fileName = scanner.nextLine();
@@ -75,12 +75,16 @@ public class PuzzleSolver {
     }
 
     static void displaySolutions() {
-        System.out.println("Solutions:"); //to delete
+        System.out.println("Solutions:"); //TODO delete
         for (int[][] solution : solutions) {
             for (int[] row : solution) {
                 System.out.println(Arrays.toString(row));
             }
             System.out.println();
         }
+    }
+
+    static void writeSolutionsToFile(String fileName) {
+        //TODO
     }
 }
