@@ -18,7 +18,7 @@ public class PuzzleSolver {
 
         try {
             processPuzzle(fileName);
-            solutions = pieces; //to delete
+            solvePuzzle();
             displaySolutions();
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred while reading the file: " + e.getMessage());
@@ -63,6 +63,10 @@ public class PuzzleSolver {
 
     static int[] rotatePiece(int[] sides) {
         return new int[]{sides[3], sides[0], sides[1], sides[2]};
+    }
+
+    static void solvePuzzle() {
+        solutions = pieces; //to delete
     }
 
     static void displaySolutions() {
