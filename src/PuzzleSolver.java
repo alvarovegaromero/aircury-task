@@ -1,41 +1,74 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class PuzzleSolver {
+    private static final int SIDES = 4;
+    private static final int ROTATIONS = 4;
+
     static int width, height;
+    static List<int[][]> pieces = new ArrayList<>();
+    static List<int[][]> solutions = new ArrayList<>();
 
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.print("Write the name of the Puzzle you want to solve: ");
             String fileName  = scanner.nextLine();
 
-            File puzzle = new File("puzzles/"+fileName);
+            processPuzzle(fileName);
+            solutions = pieces; //to delete
+            displaySolutions();
 
-            try (Scanner fileScanner = new Scanner(puzzle)) {
-                width = fileScanner.nextInt();
-                height = fileScanner.nextInt();
-                fileScanner.nextLine();
-
-                while (fileScanner.hasNextLine()) {
-                    String line = fileScanner.nextLine();
-                    System.out.println(line);
-                }
-                   
-            } catch (FileNotFoundException e) {
-                System.out.println("An error occurred while reading the file: " + e.getMessage());
-            }
         } catch (Exception e) {
             System.out.println("An error occurred while reading the input: " + e.getMessage());
         }
     }
 
-    /*static void displaySolutions() {
+    public static void processPuzzle(String fileName) {
+        File puzzle = new File("puzzles/" + fileName);
+    
+        try (Scanner fileScanner = new Scanner(puzzle)) {
+            width = fileScanner.nextInt();
+            height = fileScanner.nextInt();
+            fileScanner.nextLine();
+    
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine().trim();
+                if (!line.isEmpty()) {
+                    String[] parts = line.split(" ");
+                    int[] sides = Arrays.stream(parts).mapToInt(Integer::parseInt).toArray();
+                    pieces.add(generateAllRotations(sides));
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred while reading the file: " + e.getMessage());
+        }
+    }
+
+    static int[][] generateAllRotations(int[] sides) {
+        int[][] rotations = new int[ROTATIONS][SIDES];
+        int[] current = sides.clone();
+        for (int i = 0; i < ROTATIONS; i++) {
+            rotations[i] = current.clone();
+            current = rotatePiece(current);
+        }
+        return rotations;
+    }
+
+    static int[] rotatePiece(int[] sides) {
+        return new int[]{sides[3], sides[0], sides[1], sides[2]};
+    }
+
+    static void displaySolutions() {
+        System.out.println("Solutions:"); //to delete
         for (int[][] solution : solutions) {
             for (int[] row : solution) {
                 System.out.println(Arrays.toString(row));
             }
             System.out.println();
         }
-    }*/
+    }
 }
