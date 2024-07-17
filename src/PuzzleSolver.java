@@ -4,14 +4,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class PuzzleSolver {
     private static final int SIDES = 4;
     private static final int ROTATIONS = 4;
 
     private static int width, height;
-    private static List<int[][]> pieces = new ArrayList<>();
-    private static List<int[][]> solutions = new ArrayList<>();
+    //private static List<int[][]> pieces = new ArrayList<>();
+    private static List<int[]> pieces = new ArrayList<>();
+    private static List<int[]> solutions = new ArrayList<>();
 
     public static void main(String[] args) {
         try {
@@ -38,24 +40,25 @@ public class PuzzleSolver {
     private static void processFile(String fileName) {
         File puzzle = new File("puzzles/" + fileName);
 
-        try (Scanner fileScanner = new Scanner(puzzle)) {
+        try (Scanner fileScanner = new Scanner(puzzle)) { 
             width = fileScanner.nextInt();
             height = fileScanner.nextInt();
             fileScanner.nextLine();
-
+        
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine().trim();
                 if (!line.isEmpty()) {
                     String[] parts = line.split(" ");
                     int[] sides = Arrays.stream(parts).mapToInt(Integer::parseInt).toArray();
-                    pieces.add(generateAllRotations(sides));
+                    pieces.add(sides);
+                    //pieces.add(generateAllRotations(sides));
                 }
             }
         } catch (FileNotFoundException e) {
             throw new RuntimeException("The specified file could not be found: " + fileName);
         }
     }
-
+/*
     private static int[][] generateAllRotations(int[] sides) {
         int[][] rotations = new int[ROTATIONS][SIDES];
         int[] current = sides.clone();
@@ -77,18 +80,36 @@ public class PuzzleSolver {
         }
         return rotated;
     }
-
+*/
     private static void solvePuzzle() {
-        solutions = pieces; //to delete
+        for (int i = 0; i < pieces.size(); i++) {
+            solutions.add(new int[]{i});
+        }
+    }
+        
+    private static boolean solveRecursive(int[][] board, List<int[][]> remainingPieces, int row, int col) {
+        return false;
+    }
+
+    private static boolean pieceFits(int[][] board, int[][] piece, int row, int col) {
+        return false;
+    }
+
+    private static void placePiece(int[][] board, int[][] piece, int row, int col) {
+        
+    }
+    
+    private static void removePiece(int[][] board, int[][] piece, int row, int col) {
+
     }
 
     private static void displaySolutions() {
-        System.out.println("Solutions:"); //TODO delete
-        for (int[][] solution : solutions) {
-            for (int[] row : solution) {
-                System.out.println(Arrays.toString(row));
-            }
-            System.out.println();
+        System.out.println("Solutions:");
+        for (int[] solution : solutions) {
+            String solutionStr = String.join(", ", Arrays.stream(solution)
+                                                        .mapToObj(Integer::toString)
+                                                        .collect(Collectors.toList()));
+            System.out.println(solutionStr);
         }
     }
 }
