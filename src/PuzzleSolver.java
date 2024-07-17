@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class PuzzleSolver {
@@ -23,4 +24,13 @@ public class PuzzleSolver {
             System.out.println("An error occurred while reading the input: " + e.getMessage());
         }
     }
+
+    /*static void displaySolutions() {
+        for (int[][] solution : solutions) {
+            for (int[] row : solution) {
+                System.out.println(Arrays.toString(row));
+            }
+            System.out.println();
+        }
+    }*/
 }
