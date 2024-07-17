@@ -91,8 +91,4 @@ public class PuzzleSolver {
             System.out.println();
         }
     }
-
-    private static void writeSolutionsToFile(String fileName) {
-        //TODO
-    }
 }
