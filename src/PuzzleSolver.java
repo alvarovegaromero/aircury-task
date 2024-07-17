@@ -14,32 +14,35 @@ public class PuzzleSolver {
     static List<int[][]> solutions = new ArrayList<>();
 
     public static void main(String[] args) {
-        String fileName = getInput();
-
         try {
-            processPuzzle(fileName);
+            String fileName = getInput();
+            processFile(fileName);
             solvePuzzle();
             displaySolutions();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred while reading the file: " + e.getMessage());
+        } catch(Exception e) {
+            System.out.println("Error during program execution - " + e.getMessage());
         }
     }
 
     public static String getInput() {
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.print("Write the name of the Puzzle you want to solve: ");
-            return scanner.nextLine();
+            String fileName = scanner.nextLine();
+            if (fileName.isEmpty()) {
+                throw new IllegalArgumentException("File name cannot be empty");
+            }
+            return fileName;
         }
     }
 
-    public static void processPuzzle(String fileName) throws FileNotFoundException {
+    public static void processFile(String fileName) {
         File puzzle = new File("puzzles/" + fileName);
-    
+
         try (Scanner fileScanner = new Scanner(puzzle)) {
             width = fileScanner.nextInt();
             height = fileScanner.nextInt();
             fileScanner.nextLine();
-    
+
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine().trim();
                 if (!line.isEmpty()) {
@@ -48,6 +51,8 @@ public class PuzzleSolver {
                     pieces.add(generateAllRotations(sides));
                 }
             }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("The specified file could not be found: " + fileName);
         }
     }
 
