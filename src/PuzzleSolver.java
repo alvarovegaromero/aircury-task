@@ -14,20 +14,25 @@ public class PuzzleSolver {
     static List<int[][]> solutions = new ArrayList<>();
 
     public static void main(String[] args) {
-        try (Scanner scanner = new Scanner(System.in)) {
-            System.out.print("Write the name of the Puzzle you want to solve: ");
-            String fileName  = scanner.nextLine();
+        String fileName = getInput();
 
+        try {
             processPuzzle(fileName);
             solutions = pieces; //to delete
             displaySolutions();
-
-        } catch (Exception e) {
-            System.out.println("An error occurred while reading the input: " + e.getMessage());
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred while reading the file: " + e.getMessage());
         }
     }
 
-    public static void processPuzzle(String fileName) {
+    public static String getInput() {
+        try (Scanner scanner = new Scanner(System.in)) {
+            System.out.print("Write the name of the Puzzle you want to solve: ");
+            return scanner.nextLine();
+        }
+    }
+
+    public static void processPuzzle(String fileName) throws FileNotFoundException {
         File puzzle = new File("puzzles/" + fileName);
     
         try (Scanner fileScanner = new Scanner(puzzle)) {
@@ -43,8 +48,6 @@ public class PuzzleSolver {
                     pieces.add(generateAllRotations(sides));
                 }
             }
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred while reading the file: " + e.getMessage());
         }
     }
 
