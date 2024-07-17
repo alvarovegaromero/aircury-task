@@ -9,9 +9,9 @@ public class PuzzleSolver {
     private static final int SIDES = 4;
     private static final int ROTATIONS = 4;
 
-    static int width, height;
-    static List<int[][]> pieces = new ArrayList<>();
-    static List<int[][]> solutions = new ArrayList<>();
+    private static int width, height;
+    private static List<int[][]> pieces = new ArrayList<>();
+    private static List<int[][]> solutions = new ArrayList<>();
 
     public static void main(String[] args) {
         try {
@@ -24,7 +24,7 @@ public class PuzzleSolver {
         }
     }
 
-    public static String getFilenameInput() {
+    private static String getFilenameInput() {
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.print("Write the name of the Puzzle you want to solve: ");
             String fileName = scanner.nextLine();
@@ -35,7 +35,7 @@ public class PuzzleSolver {
         }
     }
 
-    public static void processFile(String fileName) {
+    private static void processFile(String fileName) {
         File puzzle = new File("puzzles/" + fileName);
 
         try (Scanner fileScanner = new Scanner(puzzle)) {
@@ -56,7 +56,7 @@ public class PuzzleSolver {
         }
     }
 
-    static int[][] generateAllRotations(int[] sides) {
+    private static int[][] generateAllRotations(int[] sides) {
         int[][] rotations = new int[ROTATIONS][SIDES];
         int[] current = sides.clone();
         for (int i = 0; i < ROTATIONS; i++) {
@@ -66,7 +66,7 @@ public class PuzzleSolver {
         return rotations;
     }
 
-    static int[] rotatePiece(int[] sides) {
+    private static int[] rotatePiece(int[] sides) {
         if (sides.length != SIDES) {
             throw new IllegalArgumentException("The input array must have " + SIDES + " elements.");
         }
@@ -78,11 +78,11 @@ public class PuzzleSolver {
         return rotated;
     }
 
-    static void solvePuzzle() {
+    private static void solvePuzzle() {
         solutions = pieces; //to delete
     }
 
-    static void displaySolutions() {
+    private static void displaySolutions() {
         System.out.println("Solutions:"); //TODO delete
         for (int[][] solution : solutions) {
             for (int[] row : solution) {
@@ -92,7 +92,7 @@ public class PuzzleSolver {
         }
     }
 
-    static void writeSolutionsToFile(String fileName) {
+    private static void writeSolutionsToFile(String fileName) {
         //TODO
     }
 }
