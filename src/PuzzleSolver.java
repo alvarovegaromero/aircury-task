@@ -67,7 +67,15 @@ public class PuzzleSolver {
     }
 
     static int[] rotatePiece(int[] sides) {
-        return new int[]{sides[3], sides[0], sides[1], sides[2]};
+        if (sides.length != SIDES) {
+            throw new IllegalArgumentException("The input array must have " + SIDES + " elements.");
+        }
+        int[] rotated = new int[SIDES];
+        rotated[0] = sides[SIDES - 1];
+        for (int i = 1; i < SIDES; i++) {
+            rotated[i] = sides[i - 1];
+        }
+        return rotated;
     }
 
     static void solvePuzzle() {
