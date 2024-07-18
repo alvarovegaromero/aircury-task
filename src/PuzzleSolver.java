@@ -7,11 +7,7 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class PuzzleSolver {
-    private static final int SIDES = 4;
-    private static final int ROTATIONS = 4;
-
     private static int width, height;
-    //private static List<int[][]> pieces = new ArrayList<>();
     private static List<Piece> pieces = new ArrayList<>();
     private static List<int[][]> solutions = new ArrayList<>();
 
