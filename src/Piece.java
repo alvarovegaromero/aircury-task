@@ -13,6 +13,10 @@ public class Piece {
         return sides;
     }
 
+    public int getSide(int index) {
+        return sides[index];
+    }
+
     public void setSides(int[] sides) {
         this.sides = sides;
     }
