@@ -25,6 +25,12 @@ public class Piece {
         this.rowIndex = rowIndex;
     }
 
+    public void rotate() {
+        int lastElement = sides[sides.length - 1];
+        System.arraycopy(sides, 0, sides, 1, sides.length - 1);
+        sides[0] = lastElement;
+    }
+
     @Override
     public String toString() {
         return "Index: "+ rowIndex + " - Content: "+Arrays.toString(sides);
