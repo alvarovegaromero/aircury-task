@@ -7,7 +7,9 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class PuzzleSolver {
-    private static final int ROTATIONS = 4;    
+    private static final int ROTATIONS = 4;
+    private static final int BORDER = 0;
+
     private static int width, height;
     private static final List<Piece> pieces = new ArrayList<>();
     private static final List<int[][]> solutions = new ArrayList<>();
@@ -163,7 +165,7 @@ public class PuzzleSolver {
             return board[row - 1][col] == null || //Piece above not null and with same side
                 board[row - 1][col].getSide(Orientations.DOWN.getValue()) == side;
         } else { // row == 0
-            return side == 0;
+            return side == BORDER;
         }
     }
 
@@ -172,7 +174,7 @@ public class PuzzleSolver {
             return board[row][col + 1] == null || 
                    board[row][col + 1].getSide(Orientations.LEFT.getValue()) == side;
         } else { // col == width - 1
-            return side == 0;
+            return side == BORDER;
         }
     }
     
@@ -181,7 +183,7 @@ public class PuzzleSolver {
             return board[row + 1][col] == null || 
                    board[row + 1][col].getSide(Orientations.UP.getValue()) == side;
         } else { // row == height - 1
-            return side == 0;
+            return side == BORDER;
         }
     }
     
@@ -190,7 +192,7 @@ public class PuzzleSolver {
             return board[row][col - 1] == null || 
                    board[row][col - 1].getSide(Orientations.RIGHT.getValue()) == side;
         } else { // col == 0
-            return side == 0;
+            return side == BORDER;
         }
     }
 
