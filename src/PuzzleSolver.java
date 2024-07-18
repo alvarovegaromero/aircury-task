@@ -70,12 +70,25 @@ public class PuzzleSolver {
             System.out.println("FILLED THE BOARD");
             int[][] solution = new int[height][width];
             for (int i = 0; i < height; i++) {
-                for(int j = 0; j < width; j++)
-                {
+                for(int j = 0; j < width; j++) {
                     solution[i][j] = board[i][j].getRowIndex();
                 }
             }
-            solutions.add(solution); // Add the solution
+        
+            // Check if the solution is a rotation of an existing solution
+            boolean isRotation = false;
+            for (int[][] existingSolution : solutions) {
+                if (isRotation(solution, existingSolution)) {
+                    isRotation = true;
+                    break;
+                }
+            }
+        
+            // If the solution is not a rotation of an existing solution, add it
+            if (!isRotation) {
+                solutions.add(solution);
+            }
+        
             return;
         }
         
@@ -115,6 +128,27 @@ public class PuzzleSolver {
         }
     }
 
+    private static boolean isRotation(int[][] solution, int[][] existingSolution) {
+        for (int i = 0; i < 4; i++) {
+            if (Arrays.deepEquals(solution, existingSolution)) {
+                return true;
+            }
+            existingSolution = rotateMatrix(existingSolution);
+        }
+        return false;
+    }
+    
+    private static int[][] rotateMatrix(int[][] matrix) {
+        int size = matrix.length;
+        int[][] rotatedMatrix = new int[size][size];
+        for (int i = 0; i < size; ++i) {
+            for (int j = 0; j < size; ++j) {
+                rotatedMatrix[i][j] = matrix[size-j-1][i];
+            }
+        }
+        return rotatedMatrix;
+    }
+
     private static boolean pieceFits(Piece[][] board, Piece piece, int row, int col) {
         // Check if the piece fits within the limits of the board
         //System.out.println("checking fit");
@@ -152,7 +186,6 @@ public class PuzzleSolver {
         } else if(sides[Orientations.RIGHT.getValue()] != 0){ //col == width
             return false;
         }
-        //System.out.println("AAAAAA");
 
         // Check below
         if(row < (height - 1)){
