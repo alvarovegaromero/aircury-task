@@ -16,6 +16,7 @@ public class PuzzleSolver {
 
     public static void main(String[] args) {
         try {
+            displayUsage();
             String fileName = getPuzzleFilenameFromUser();
             loadPuzzleFromFile(fileName);
             solvePuzzle();
@@ -23,6 +24,15 @@ public class PuzzleSolver {
         } catch(Exception e) {
             System.out.println("Error during program execution - " + e.getMessage());
         }
+    }
+
+    private static void displayUsage() {
+        System.out.println("""
+                           Usage: Run the program and when prompted, enter the filename of \
+                           the puzzle you want to solve. 
+                           Example: \033[1m2x3.txt\033[0m
+                           """
+                          );
     }
 
     private static String getPuzzleFilenameFromUser() {
