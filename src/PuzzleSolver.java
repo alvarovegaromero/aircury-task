@@ -107,10 +107,12 @@ public class PuzzleSolver {
     }
 
     private static int[][] rotateMatrix(int[][] matrix) {
-        int[][] rotatedMatrix = new int[width][height];
-        for (int i = 0; i < width; ++i) {
-            for (int j = 0; j < height; ++j) {
-                rotatedMatrix[i][j] = matrix[width-j-1][i];
+        int matrixHeight = matrix.length;
+        int matrixWidth = matrix[0].length;
+        int[][] rotatedMatrix = new int[matrixWidth][matrixHeight];
+        for (int i = 0; i < matrixWidth; ++i) {
+            for (int j = 0; j < matrixHeight; ++j) {
+                rotatedMatrix[i][j] = matrix[matrixHeight-j-1][i];
             }
         }
         return rotatedMatrix;
